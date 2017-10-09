@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:background="#ffffff"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:background="#afafaf"
+        android:text="Selection du harnais"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dip"
+        android:layout_marginTop="25dip"
+        android:layout_marginBottom="25dip"
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
+            <ListView
+            android:id="@+id/listeharnais"
+            android:layout_width="fill_parent"
+            android:layout_height="119dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:background="#afafaf"
+        android:text="Selection du destinataire"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dip"
+        android:layout_marginTop="25dip"
+        android:layout_marginBottom="25dip"
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
+            <ListView
+            android:id="@+id/listedestinataire"
+            android:layout_width="fill_parent"
+            android:layout_height="127dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#03ba31"
+        android:layout_marginLeft="25dip"
+        android:layout_marginTop="25dip"
+        android:layout_marginBottom="25dip"
+        android:layout_marginRight="25dip"
+        android:layout_weight="0.03"
+        android:text="OK" />
+
+</LinearLayout>
