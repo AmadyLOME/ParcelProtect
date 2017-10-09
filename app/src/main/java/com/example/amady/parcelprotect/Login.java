@@ -103,8 +103,6 @@ public class Login extends AppCompatActivity
             }
         });
 
-        int i = 0;
-        Log.d("TAG","print i:" + i);
 
     }
 
