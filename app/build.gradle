@@ -37,6 +37,7 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
     compile 'org.apache.httpcomponents:httpcore:4.4.1'
+    compile 'com.mcxiaoke.volley:library:1.0.18'
     testCompile 'junit:junit:4.12'
 }
 

@@ -10,6 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -19,6 +28,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -30,7 +41,9 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -69,8 +82,17 @@ public class Enregistrement extends AppCompatActivity {
         final EditText champMp = (EditText) findViewById(R.id.mpClient);
         final EditText champCmp = (EditText) findViewById(R.id.cmpClient);
 
+        //requestQueue
+        final RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
         // Button pour envoyer les élements dans la base
         Button signIn = (Button) findViewById(R.id.btenregistrer);
+
+        // Url du fichier insert.php
+        final String insertUrl = "https://upmost-limps.000webhostapp.com/arona/insert.php";
+        // Url du fichier showClient.php
+        final String showUrl = "https://upmost-limps.000webhostapp.com/arona/showClient.php";
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,21 +104,49 @@ public class Enregistrement extends AppCompatActivity {
                 int pseudosize = champPseudo.getText().length();
                 int mpsize = champMp.getText().length();
                 int cmpsize = champCmp.getText().length();
+
+
                 // Vérifications de la contenabilité des champs ainsi que de l'équivalence des mot-passe
-                if ((nomsize > 0) && (prenomsize > 0) && (emailsize > 0) && (telephonezisize > 0) && (pseudosize > 0) && (mpsize > 0) && (cmpsize > 0) && (champCmp == champMp))
-                {
-                    String name = champNom.getText().toString();
-                    String surname = champPrenom.getText().toString();
-                    String mail = champNom.getText().toString();
-                    String phone = champPrenom.getText().toString();
-                    String pseudo = champNom.getText().toString();
-                    String pass = champPrenom.getText().toString();
+                if ((nomsize > 0) && (prenomsize > 0) && (emailsize > 0) && (telephonezisize > 0) && (pseudosize > 0) && (mpsize > 0) && (cmpsize > 0) && (champCmp == champMp)) {
+                    final String name = champNom.getText().toString();
+                    final String surname = champPrenom.getText().toString();
+                    final String mail = champEmail.getText().toString();
+                    final String phone = champTelephone.getText().toString();
+                    final String pseudo = champPseudo.getText().toString();
+                    String pass = champCmp.getText().toString();
 
                     // On appelle la fonction doregistered qui va communiquer avec le PHP et inserer les informations
-                    //doLogin(name, surname,mail,phone,pseudo,pass);
-                }
-                else
+                    //doLogin(name, surname,mail,phone,pseudo,pass)
+
+
+                    //Insert dans php
+                    StringRequest request = new StringRequest(Request.Method.POST, insertUrl, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> parameters = new HashMap<String, String>();
+                            parameters.put("nom", surname);
+                            parameters.put("prenom", name);
+                            parameters.put("email", mail);
+                            parameters.put("telephone", phone);
+                            parameters.put("pseudo", pseudo);
+
+                            return parameters;
+                        }
+                    };
+                    requestQueue.add(request);
+                } else {
                     createDialog("Attention", "Un des champs n'est pas renseigné!");
+                }
             }
         });
     }
