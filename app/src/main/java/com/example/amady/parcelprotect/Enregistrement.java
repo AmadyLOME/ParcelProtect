@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -104,20 +105,30 @@ public class Enregistrement extends AppCompatActivity {
                 int pseudosize = champPseudo.getText().length();
                 int mpsize = champMp.getText().length();
                 int cmpsize = champCmp.getText().length();
+                String mdp1 = champMp.getText().toString();
+                String mdp2 = champCmp.getText().toString();
+
+                boolean mdpTrue = (mdp1 == mdp2);
+
+                Log.d("TAG","-----------Boolean: " + Boolean.toString(mdpTrue));
+                Log.d("TAG","-----------Boolean: " + mdp1 + mdp2);
 
 
                 // Vérifications de la contenabilité des champs ainsi que de l'équivalence des mot-passe
-                if ((nomsize > 0) && (prenomsize > 0) && (emailsize > 0) && (telephonezisize > 0) && (pseudosize > 0) && (mpsize > 0) && (cmpsize > 0) && (champCmp == champMp)) {
+                if ((nomsize > 0) && (prenomsize > 0) && (emailsize > 0) && (telephonezisize > 0) && (pseudosize > 0) && (mpsize > 0) && (cmpsize > 0) ) {
                     final String name = champNom.getText().toString();
                     final String surname = champPrenom.getText().toString();
                     final String mail = champEmail.getText().toString();
                     final String phone = champTelephone.getText().toString();
                     final String pseudo = champPseudo.getText().toString();
-                    String pass = champCmp.getText().toString();
+                    String pass = champMp.getText().toString();
+                    String passConfirme = champCmp.getText().toString();
+                    Log.d("Test", pass + " " + passConfirme + pass.equals(passConfirme));
 
                     // On appelle la fonction doregistered qui va communiquer avec le PHP et inserer les informations
                     //doLogin(name, surname,mail,phone,pseudo,pass)
-
+                    //Mail de confirmation
+                    sendConfirmationEmail(mail);
 
                     //Insert dans php
                     StringRequest request = new StringRequest(Request.Method.POST, insertUrl, new Response.Listener<String>() {
@@ -149,6 +160,20 @@ public class Enregistrement extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void sendConfirmationEmail(String email) {
+        //setting content for email
+        String subject = "Confirmation de votre inscription";
+        String message = "Bonjour,\nNous vous remercions de votre demande de création de compte.\n" +
+                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : coller le lien ici\n" +
+                "Une fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n" +
+                "\nCordialement,\nL'équipe #TEAMHARNAIS";
+
+        SendMail sm = new SendMail(this, email, subject, message);
+
+        //Executing sendmail to send the mail
+        sm.execute();
     }
 
     // Méthode d'annulation
