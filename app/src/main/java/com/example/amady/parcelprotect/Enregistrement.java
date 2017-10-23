@@ -2,9 +2,7 @@ package com.example.amady.parcelprotect;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,41 +14,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 /**
+ * Created by Arona on 16/09/2017.
  * Created by Amady on 16/09/2017.
  */
 
@@ -164,25 +137,16 @@ public class Enregistrement extends AppCompatActivity {
 
     private void sendConfirmationEmail(String email) {
         //setting content for email
-        String subject = "Confirmation de votre inscription";
+        String subject = "Bienvenue chez ParcelProtect";
         String message = "Bonjour,\nNous vous remercions de votre demande de création de compte.\n" +
                 "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : coller le lien ici\n" +
-                "Une fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n" +
+                "Une fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n\n" +
                 "\nCordialement,\nL'équipe #TEAMHARNAIS";
 
         SendMail sm = new SendMail(this, email, subject, message);
 
         //Executing sendmail to send the mail
         sm.execute();
-    }
-
-    // Méthode d'annulation
-    private void quit(boolean success, Intent i)
-    {
-        //On envoie un résultat qui va permettre de quitter l'appli
-        //setResult((success) ? Activity.RESULT_OK : Activity.RESULT_CANCELED, i);
-        //finish();
-
     }
 
     private void createDialog(String title, String text)
@@ -192,97 +156,6 @@ public class Enregistrement extends AppCompatActivity {
                 .setPositiveButton("Ok", null).setTitle(title).setMessage(text)
                 .create();
         ad.show();
-
-    }
-
-    // méthode de verification base de données
-    private void doLogin(final String login, final String pass)
-    {
-        //on code le password avec le modèle md5
-        final String pw = md5(pass);
-        // Création d'un thread
-        Thread t = new Thread()
-        {
-            public void run()
-            {
-
-                Looper.prepare();
-                // On se connecte au serveur afin de communiquer avec le PHP
-                DefaultHttpClient client = new DefaultHttpClient();
-                HttpConnectionParams.setConnectionTimeout(client.getParams(), 15000);
-                HttpResponse response;
-                HttpEntity entity;
-                try
-                {
-                    // On établit un lien avec le script PHP
-                    HttpPost post = new HttpPost(UPDATE_URL);
-                    //declaration du tableau conteneur des valeurs de mp et pw
-                    List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-
-                    nvps.add(new BasicNameValuePair("username", login));
-
-                    nvps.add(new BasicNameValuePair("password", pw));
-
-                    post.setHeader("Content-Type", "application/x-www-form-urlencoded");
-                    // On passe les paramètres login et password qui vont être récupérés
-                    // par le script PHP en post
-                    post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-                    // On récupère le résultat du script
-                    response = client.execute(post);
-
-                    entity = response.getEntity();
-
-                    InputStream is = entity.getContent();
-                    // On appelle une fonction définie plus bas pour traduire la réponse
-                    read(is);
-                    is.close();
-
-                    if (entity != null)
-                        entity.consumeContent();
-
-                }
-                catch (Exception e)
-                {
-
-                    progressDialog.dismiss();
-                    createDialog("Erreur", "La connexion à la base n'a pas pu être faite!");
-
-                }
-
-                Looper.loop();
-
-            }
-
-        };
-        //boucle sur thread
-        t.start();
-    }
-
-    private void read(InputStream in)
-    {
-        // On traduit le résultat d'un flux
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp;
-        try
-        {
-            sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
-            // Cette classe est définie plus bas
-            //Enregistrement.LoginContentHandler uch = new Login.LoginContentHandler();
-            //xr.setContentHandler(uch);
-            xr.parse(new InputSource(in));
-        }
-        catch (ParserConfigurationException e)
-        {
-
-        }
-        catch (SAXException e)
-        {
-
-        }
-        catch (IOException e)
-        {
-        }
 
     }
 
@@ -320,80 +193,6 @@ public class Enregistrement extends AppCompatActivity {
         }
 
         return null;
-
-    }
-
-    private class LoginContentHandler extends DefaultHandler
-    {
-        // Classe traitant le message de retour du script PHP
-        private boolean	in_loginTag		= false;
-        private int			userID;
-        private boolean	error_occured	= false;
-
-        public void startElement(String n, String l, String q, Attributes a)
-
-                throws SAXException
-
-        {
-
-            if (l == "login")
-                in_loginTag = true;
-            if (l == "error")
-            {
-
-                progressDialog.dismiss();
-
-                switch (Integer.parseInt(a.getValue("value")))
-                {
-                    case 1:
-                        createDialog("Erreur", "Pas de Connexion à la base");
-                        break;
-                    case 2:
-                        createDialog("Erreur", "Il y'a des tables manquantes dans la base");
-                        break;
-                    case 3:
-                        createDialog("Erreur", "Invalide username ou mot de passe");
-                        break;
-                }
-                error_occured = true;
-
-            }
-
-            if (l == "user" && in_loginTag && a.getValue("id") != "")
-                // Dans le cas où tout se passe bien on récupère l'ID de l'utilisateur et on lance l'activité choix
-                userID = Integer.parseInt(a.getValue("id"));
-            Intent intent = new Intent(Enregistrement.this, InterfaceChoix.class);
-            startActivity(intent);
-        }
-
-        public void endElement(String n, String l, String q) throws SAXException
-        {
-            // on renvoie l'id si tout est ok
-            if (l == "login")
-            {
-                in_loginTag = false;
-
-                if (!error_occured)
-                {
-                    progressDialog.dismiss();
-                    Intent i = new Intent();
-                    i.putExtra("userid", userID);
-                    quit(true, i);
-                }
-            }
-        }
-
-        public void characters(char ch[], int start, int length)
-        {
-        }
-
-        public void startDocument() throws SAXException
-        {
-        }
-
-        public void endDocument() throws SAXException
-        {
-        }
 
     }
 }
