@@ -96,12 +96,12 @@ public class Enregistrement extends AppCompatActivity {
                     final String pseudo = champPseudo.getText().toString();
                     String pass = champMp.getText().toString();
                     String passConfirme = champCmp.getText().toString();
+                    double randomNumber = Math.random() * Math.random();
+                    final String codeConfirmation = String.valueOf(randomNumber);
                     Log.d("Test", pass + " " + passConfirme + pass.equals(passConfirme));
 
-                    // On appelle la fonction doregistered qui va communiquer avec le PHP et inserer les informations
-                    //doLogin(name, surname,mail,phone,pseudo,pass)
                     //Mail de confirmation
-                    sendConfirmationEmail(mail);
+                    sendConfirmationEmail(mail, codeConfirmation);
 
                     //Insert dans php
                     StringRequest request = new StringRequest(Request.Method.POST, insertUrl, new Response.Listener<String>() {
@@ -123,6 +123,7 @@ public class Enregistrement extends AppCompatActivity {
                             parameters.put("email", mail);
                             parameters.put("telephone", phone);
                             parameters.put("pseudo", pseudo);
+                            parameters.put("activationKey", codeConfirmation);
 
                             return parameters;
                         }
@@ -135,12 +136,13 @@ public class Enregistrement extends AppCompatActivity {
         });
     }
 
-    private void sendConfirmationEmail(String email) {
+    private void sendConfirmationEmail(String email, String codeConfirmation) {
         //setting content for email
         String subject = "Bienvenue chez ParcelProtect";
         String message = "Bonjour,\nNous vous remercions de votre demande de création de compte.\n" +
-                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : coller le lien ici\n" +
-                "Une fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n\n" +
+                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : [lien de la page]\n\n" +
+                "Votre code d'activation est le : "+ codeConfirmation +
+                "\n\nUne fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n\n" +
                 "\nCordialement,\nL'équipe #TEAMHARNAIS";
 
         SendMail sm = new SendMail(this, email, subject, message);
