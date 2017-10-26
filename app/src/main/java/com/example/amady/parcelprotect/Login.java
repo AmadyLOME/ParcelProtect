@@ -1,49 +1,43 @@
 package com.example.amady.parcelprotect;
 
-import android.support.v7.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.cast.framework.SessionManager;
 
-import java.io.IOException;
-import java.io.InputStream;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+
 
 public class Login extends AppCompatActivity
 {
     // Lien vers votre page php sur votre serveur
-    private static final String	UPDATE_URL	= "https://files.000webhost.com/public_html/login.php";
+    // Server user login url
+    public static String URL_LOGIN = "https://upmost-limps.000webhostapp.com/amady/login.php";
 
     public ProgressDialog				progressDialog;
+
+    public String TAG;
+
+    private SessionManager session;
 
     private EditText						UserEditText;
 
@@ -59,8 +53,11 @@ public class Login extends AppCompatActivity
         progressDialog = new ProgressDialog(this);
         // Affichage de message
         progressDialog.setMessage("Veuillez attendre la connexion à la base...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
+        //progressDialog.setIndeterminate(true);
+        //progressDialog.setCancelable(false);
+
+        // Session manager
+        //session = new SessionManager(getApplicationContext());
 
         // Récupération des éléments de la vue définis dans le xml
         UserEditText = (EditText) findViewById(R.id.username);
@@ -81,16 +78,17 @@ public class Login extends AppCompatActivity
                 {
                     progressDialog.show();
                     // on affecte la valeur de user et pass les identifiants rentrées par l'utilisateur
-                    String user = UserEditText.getText().toString();
-                    String pass = PassEditText.getText().toString();
+                    String email = UserEditText.getText().toString();
+                    String password = PassEditText.getText().toString();
                     // On appelle la fonction doLogin qui va communiquer avec le PHP et vérifier les logs
-                    doLogin(user, pass);
+                    checkLogin(email,md5(password));
                 }
                 else
                     createDialog("Erreur", "L'email ou le mot de passe n'est pas valide!");
             }
 
         });
+
         // Boutton d'enregistrement
         button = (Button) findViewById(R.id.registered);
         // Création du listener du bouton d'enregistrement (on sort de l'appli)
@@ -102,18 +100,94 @@ public class Login extends AppCompatActivity
                 startActivity(intent);
             }
         });
-
-
     }
 
-    // Méthode d'annulation
-    private void quit(boolean success, Intent i)
-    {
-        //On envoie un résultat qui va permettre de quitter l'appli
-        //setResult((success) ? Activity.RESULT_OK : Activity.RESULT_CANCELED, i);
-        //finish();
+    /**
+     * fonctions de verification des element login et mp
+     * */
+    private void checkLogin(final String email, final String password) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
 
+        progressDialog.setMessage("Logging in ...");
+        showDialog();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST, URL_LOGIN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+                        // user successfully logged in
+                        // Create login session
+                        //session.setlogin(true);
+
+                        // Now store the user in SQLite
+                        //String uid = jObj.getString("uid");
+                        //JSONObject user = jObj.getJSONObject("user");
+                        //String name = user.getString("name");
+                        //String email = user.getString("email");
+                        //String created_at = user.getString("created_at");
+                        // Launch main activity
+                        //on lance l'activité Interface choix
+                        Intent intent = new Intent(Login.this, InterfaceChoix.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", email);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+    private void showDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
     private void createDialog(String title, String text)
     {
         // Création d'un popup affichant un message
@@ -121,97 +195,6 @@ public class Login extends AppCompatActivity
                 .setPositiveButton("Ok", null).setTitle(title).setMessage(text)
                 .create();
         ad.show();
-    }
-
-    // méthode de verification base de données
-    private void doLogin(final String login, final String pass)
-    {
-        //on code le password avec le modèle md5
-        final String pw = md5(pass);
-        // Création d'un thread
-        Thread t = new Thread()
-        {
-            public void run()
-            {
-
-                Looper.prepare();
-                // On se connecte au serveur afin de communiquer avec le PHP
-                DefaultHttpClient client = new DefaultHttpClient();
-                HttpConnectionParams.setConnectionTimeout(client.getParams(), 15000);
-                HttpResponse response;
-                HttpEntity entity;
-                try
-                {
-                    // On établit un lien avec le script PHP
-                    HttpPost post = new HttpPost(UPDATE_URL);
-                    //declaration du tableau conteneur des valeurs de mp et pw
-                    List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-
-                    nvps.add(new BasicNameValuePair("username", login));
-
-                    nvps.add(new BasicNameValuePair("password", pw));
-
-                    post.setHeader("Content-Type", "application/x-www-form-urlencoded");
-                    // On passe les paramètres login et password qui vont être récupérés
-                    // par le script PHP en post
-                    post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-                    // On récupère le résultat du script
-                    response = client.execute(post);
-
-                    entity = response.getEntity();
-
-                    InputStream is = entity.getContent();
-                    // On appelle une fonction définie plus bas pour traduire la réponse
-                    read(is);
-                    is.close();
-
-                    if (entity != null)
-                        entity.consumeContent();
-
-                }
-                catch (Exception e)
-                {
-
-                    progressDialog.dismiss();
-                    createDialog("Erreur", "La connexion à la base n'a pas pu être faite!");
-
-                }
-
-                Looper.loop();
-
-            }
-
-        };
-        //boucle sur thread
-        t.start();
-    }
-
-    private void read(InputStream in)
-    {
-        // On traduit le résultat d'un flux
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        SAXParser sp;
-        try
-        {
-            sp = spf.newSAXParser();
-            XMLReader xr = sp.getXMLReader();
-            // Cette classe est définie plus bas
-            LoginContentHandler uch = new LoginContentHandler();
-            xr.setContentHandler(uch);
-            xr.parse(new InputSource(in));
-        }
-        catch (ParserConfigurationException e)
-        {
-
-        }
-        catch (SAXException e)
-        {
-
-        }
-        catch (IOException e)
-        {
-        }
-
     }
 
     private String md5(String in)
@@ -250,79 +233,5 @@ public class Login extends AppCompatActivity
         return null;
 
     }
-
-    private class LoginContentHandler extends DefaultHandler
-    {
-        // Classe traitant le message de retour du script PHP
-        private boolean	in_loginTag		= false;
-        private int			userID;
-        private boolean	error_occured	= false;
-
-        public void startElement(String n, String l, String q, Attributes a)
-
-                throws SAXException
-
-        {
-
-            if (l == "login")
-                in_loginTag = true;
-            if (l == "error")
-            {
-
-                progressDialog.dismiss();
-
-                switch (Integer.parseInt(a.getValue("value")))
-                {
-                    case 1:
-                        createDialog("Erreur", "Pas de Connexion à la base");
-                        break;
-                    case 2:
-                        createDialog("Erreur", "Il y'a des tables manquantes dans la base");
-                        break;
-                    case 3:
-                        createDialog("Erreur", "Invalide username ou mot de passe");
-                        break;
-                }
-                error_occured = true;
-
-            }
-
-            if (l == "user" && in_loginTag && a.getValue("id") != "")
-                // Dans le cas où tout se passe bien on récupère l'ID de l'utilisateur et on lance l'activité choix
-                userID = Integer.parseInt(a.getValue("id"));
-                Intent intent = new Intent(Login.this, InterfaceChoix.class);
-                startActivity(intent);
-        }
-
-        public void endElement(String n, String l, String q) throws SAXException
-        {
-            // on renvoie l'id si tout est ok
-            if (l == "login")
-            {
-                in_loginTag = false;
-
-                if (!error_occured)
-                {
-                    progressDialog.dismiss();
-                    Intent i = new Intent();
-                    i.putExtra("userid", userID);
-                    quit(true, i);
-                }
-            }
-        }
-
-        public void characters(char ch[], int start, int length)
-        {
-        }
-
-        public void startDocument() throws SAXException
-        {
-        }
-
-        public void endDocument() throws SAXException
-        {
-        }
-
-    }
-
 }
+

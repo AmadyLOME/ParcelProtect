@@ -28,8 +28,6 @@ import java.util.Map;
  */
 
 public class Enregistrement extends AppCompatActivity {
-    // Lien vers votre page d'enregistrement dans la base
-    private static final String	UPDATE_URL	= "https://files.000webhost.com/public_html/registered.php";
 
     public ProgressDialog progressDialog;
 
@@ -94,7 +92,7 @@ public class Enregistrement extends AppCompatActivity {
                     final String mail = champEmail.getText().toString();
                     final String phone = champTelephone.getText().toString();
                     final String pseudo = champPseudo.getText().toString();
-                    String pass = champMp.getText().toString();
+                    final String pass = champMp.getText().toString();
                     String passConfirme = champCmp.getText().toString();
                     Log.d("Test", pass + " " + passConfirme + pass.equals(passConfirme));
 
@@ -123,6 +121,7 @@ public class Enregistrement extends AppCompatActivity {
                             parameters.put("email", mail);
                             parameters.put("telephone", phone);
                             parameters.put("pseudo", pseudo);
+                            parameters.put("password",md5(pass));
 
                             return parameters;
                         }

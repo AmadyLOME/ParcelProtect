@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class InterfaceChoix extends AppCompatActivity {
+    private SessionManager session;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
