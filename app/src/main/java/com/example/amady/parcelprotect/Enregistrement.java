@@ -94,7 +94,7 @@ public class Enregistrement extends AppCompatActivity {
                     final String pseudo = champPseudo.getText().toString();
                     final String pass = champMp.getText().toString();
                     String passConfirme = champCmp.getText().toString();
-                    double randomNumber = Math.random() * Math.random();
+                    int randomNumber = (int)(Math.random() * (59999999-15555555)) + 15555555;
                     final String codeConfirmation = String.valueOf(randomNumber);
                     Log.d("Test", pass + " " + passConfirme + pass.equals(passConfirme));
 
@@ -138,7 +138,7 @@ public class Enregistrement extends AppCompatActivity {
     private void sendConfirmationEmail(String email, String codeConfirmation) {
         //setting content for email
         String subject = "Bienvenue chez ParcelProtect";
-        String message = "Bonjour,\nNous vous remercions de votre demande de création de compte.\n" +
+        String message = "Bonjour,\n\nNous vous remercions de votre demande de création de compte.\n" +
                 "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : [lien de la page]\n\n" +
                 "Votre code d'activation est le : "+ codeConfirmation +
                 "\n\nUne fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n\n" +
