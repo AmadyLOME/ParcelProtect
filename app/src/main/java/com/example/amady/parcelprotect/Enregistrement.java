@@ -139,7 +139,7 @@ public class Enregistrement extends AppCompatActivity {
         //setting content for email
         String subject = "Bienvenue chez ParcelProtect";
         String message = "Bonjour,\n\nNous vous remercions de votre demande de création de compte.\n" +
-                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : [lien de la page]\n\n" +
+                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : http://upmost-limps.000webhostapp.com/php/validationEmail.php\n\n" +
                 "Votre code d'activation est le : "+ codeConfirmation +
                 "\n\nUne fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n\n" +
                 "\nCordialement,\nL'équipe #TEAMHARNAIS";
