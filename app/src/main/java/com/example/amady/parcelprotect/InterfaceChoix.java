@@ -17,7 +17,7 @@ public class InterfaceChoix extends AppCompatActivity {
         // Boutton de l'interface choix
         Button btenvoye = (Button) findViewById(R.id.buttenvoye);
         Button btrecu = (Button) findViewById(R.id.buttrecu);
-        Button btenvoie = (Button) findViewById(R.id.buttenvoie);
+        Button btsuivi = (Button) findViewById(R.id.buttsuivi);
 
         btenvoye.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,7 +33,7 @@ public class InterfaceChoix extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btenvoie.setOnClickListener(new View.OnClickListener() {
+        btsuivi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(InterfaceChoix.this, MapDeverrouiller.class);

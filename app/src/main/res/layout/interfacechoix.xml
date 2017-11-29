@@ -22,7 +22,7 @@
             android:textSize="21sp"
             android:layout_marginLeft="25dip"
             android:layout_marginRight="25dip"
-            android:text="Suivi de Colis"
+            android:text="Historique"
             />
     </LinearLayout>
 
@@ -64,12 +64,12 @@
             android:textSize="21sp"
             android:layout_marginLeft="25dip"
             android:layout_marginRight="25dip"
-            android:text="Envoi de Colis"
+            android:text="Colis en cours"
             />
     </LinearLayout>
 
     <Button
-        android:id="@+id/buttenvoie"
+        android:id="@+id/buttsuivi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dip"
@@ -78,6 +78,6 @@
         android:layout_marginBottom="25dip"
         android:layout_marginRight="25dip"
         android:layout_weight="0.03"
-        android:text="Sécuriser un colis" />
+        android:text="Suivi des courses" />
 
 </LinearLayout>

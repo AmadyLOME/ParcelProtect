@@ -32,6 +32,5 @@ public class Secure extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 }

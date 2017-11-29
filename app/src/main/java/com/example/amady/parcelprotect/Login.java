@@ -35,7 +35,6 @@ public class Login extends AppCompatActivity
     public ProgressDialog progressDialogSucces;
 
     private EditText UserEditText;
-
     private EditText PassEditText;
 
     public void onCreate(Bundle savedInstanceState)
@@ -49,12 +48,7 @@ public class Login extends AppCompatActivity
         progressDialogSucces = new ProgressDialog(this);
         // Affichage de message
         progressDialog.setMessage("Veuillez attendre la connexion à la base...");
-        progressDialogSucces.setMessage("Welcome to parcel protect! :)");
-        //progressDialog.setIndeterminate(true);
-        //progressDialog.setCancelable(false);
-
-        // Session manager
-        //session = new SessionManager(getApplicationContext());
+        progressDialogSucces.setMessage("Bienvenue dans votre espace");
 
         // Récupération des éléments de la vue définis dans le xml
         UserEditText = (EditText) findViewById(R.id.username);

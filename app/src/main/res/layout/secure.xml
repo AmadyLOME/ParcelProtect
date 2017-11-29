@@ -15,7 +15,7 @@
         android:text="Selection du harnais"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dip"
@@ -27,7 +27,7 @@
             android:id="@+id/listeharnais"
             android:layout_width="fill_parent"
             android:layout_height="119dp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:layout_width="fill_parent"
@@ -37,7 +37,7 @@
         android:text="Selection du destinataire"
         />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dip"
@@ -49,7 +49,7 @@
             android:id="@+id/listedestinataire"
             android:layout_width="fill_parent"
             android:layout_height="127dp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/buttOk"

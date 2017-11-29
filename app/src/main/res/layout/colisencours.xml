@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:background="#afafaf"
+        android:text="Colis en cours de reception"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dip"
+        android:layout_marginTop="25dip"
+        android:layout_marginBottom="25dip"
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/listreception"
+            android:layout_width="fill_parent"
+            android:layout_height="119dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:background="#afafaf"
+        android:text="Colis en cours d'envoi"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dip"
+        android:layout_marginTop="25dip"
+        android:layout_marginBottom="25dip"
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/listenvoie"
+            android:layout_width="fill_parent"
+            android:layout_height="127dp" />
+    </RelativeLayout>
+
+</LinearLayout>

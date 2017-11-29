@@ -36,14 +36,23 @@
         android:layout_marginRight="25dip"
         android:text="Suivi en temps réel du colis"
         tools:ignore="HardcodedText" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_marginBottom="10dip"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dip"
+            android:layout_marginTop="25dip"
+            android:background="#03ba31"
+            android:layout_marginRight="25dip"
+            android:layout_weight="0.03"
+            android:text="MAP"
+            tools:ignore="HardcodedText,InefficientWeight" />
+    </LinearLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/map"
-        tools:context=".MapDeverrouiller"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        tools:layout="@layout/mapdeverouiller" />
+
 
 </LinearLayout>

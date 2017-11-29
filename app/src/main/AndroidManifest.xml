@@ -51,11 +51,19 @@
             android:name=".ColisRecu"
             android:label="@string/app_name">
         </activity>
+        <activity
+            android:name=".ColisEnCours"
+            android:label="@string/app_name">
+        </activity>
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="mapkey1">
         </meta-data>
         <activity
             android:name=".MapDeverrouiller"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".Map"
             android:label="@string/app_name">
         </activity>
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
