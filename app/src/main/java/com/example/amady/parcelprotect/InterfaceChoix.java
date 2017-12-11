@@ -36,7 +36,7 @@ public class InterfaceChoix extends AppCompatActivity {
         btsuivi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InterfaceChoix.this, MapDeverrouiller.class);
+                Intent intent = new Intent(InterfaceChoix.this, ColisEnCours.class);
                 startActivity(intent);
             }
         });

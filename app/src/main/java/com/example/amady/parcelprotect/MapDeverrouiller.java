@@ -19,8 +19,6 @@ import android.app.Fragment;
 
 public class MapDeverrouiller extends AppCompatActivity {
 
-    private GoogleMap mMap;
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

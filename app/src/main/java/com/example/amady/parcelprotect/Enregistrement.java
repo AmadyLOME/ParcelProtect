@@ -2,6 +2,7 @@ package com.example.amady.parcelprotect;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -128,7 +129,11 @@ public class Enregistrement extends AppCompatActivity {
                         }
                     };
                     requestQueue.add(request);
-                } else {
+                    Intent intent = new Intent(Enregistrement.this, Login.class);
+                    startActivity(intent);
+                }
+
+                else {
                     createDialog("Attention", "Un des champs n'est pas renseigné!");
                 }
             }

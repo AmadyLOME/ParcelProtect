@@ -19,7 +19,7 @@ public class ColisEnCours extends AppCompatActivity {
     //essaie remplissage listview
     private String[] id_harnaisenvoie = new String[]{
             "000001","000002","000003"
-    };
+    }; 
 
     private String[] id_harnaisreception = new String[]{
             "000001","000002","000003"
