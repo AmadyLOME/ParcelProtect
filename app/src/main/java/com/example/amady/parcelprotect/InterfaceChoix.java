@@ -15,9 +15,11 @@ public class InterfaceChoix extends AppCompatActivity {
         setContentView(R.layout.interfacechoix);
 
         // Boutton de l'interface choix
+
         Button btenvoye = (Button) findViewById(R.id.buttenvoye);
         Button btrecu = (Button) findViewById(R.id.buttrecu);
         Button btsuivi = (Button) findViewById(R.id.buttsuivi);
+        Button btsecure = (Button) findViewById(R.id.buttsecure);
 
         btenvoye.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +39,14 @@ public class InterfaceChoix extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(InterfaceChoix.this, ColisEnCours.class);
+                startActivity(intent);
+            }
+        });
+
+        btsecure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InterfaceChoix.this, Secure.class);
                 startActivity(intent);
             }
         });
