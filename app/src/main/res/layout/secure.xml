@@ -6,7 +6,6 @@
     android:gravity="center_horizontal"
     android:background="#ffffff"
     android:weightSum="1">
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +25,7 @@
             <ListView
             android:id="@+id/listeharnais"
             android:layout_width="fill_parent"
-            android:layout_height="119dp" />
+            android:layout_height="50dp" />
     </RelativeLayout>
 
     <TextView
@@ -48,9 +47,32 @@
             <ListView
             android:id="@+id/listedestinataire"
             android:layout_width="fill_parent"
-            android:layout_height="127dp" />
+            android:layout_height="50dp" />
     </RelativeLayout>
-
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:background="#afafaf"
+        android:text="Code desactivation harnais pour APPWEB"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dip"
+        android:layout_marginTop="25dip"
+        android:layout_marginBottom="25dip"
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/codedesactwebapp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:numeric="integer"
+            android:inputType="number"
+            android:fadingEdge="horizontal"/>
+    </RelativeLayout>
     <Button
         android:id="@+id/buttOk"
         android:layout_width="match_parent"

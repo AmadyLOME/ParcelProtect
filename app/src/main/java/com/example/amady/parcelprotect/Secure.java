@@ -1,10 +1,12 @@
 package com.example.amady.parcelprotect;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 /**
@@ -22,15 +24,34 @@ public class Secure extends AppCompatActivity {
         // ListView
         ListView listeHarnais = (ListView) findViewById(R.id.listeharnais);
         ListView listeDestinataire = (ListView) findViewById(R.id.listedestinataire);
+
+        //essaie remplissage listview
+        private String[] harnais = new String[]{
+                "000001","000002","000003"
+        };
+        private String[] destinataire = new String[]{
+                "000001","000002","000003"
+        };
+
+        // EditText
+        EditText codeDesactivationAppWeb = (EditText) findViewById(R.id.codedesactwebapp);
         // Boutton de l'interface choix
         Button btOk = (Button) findViewById(R.id.buttOk);
         // démmarage de l'activité interface choix pour
         btOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Secure.this, InterfaceChoix.class);
-                startActivity(intent);
+                createDialog("Succès","Votre Colis est en cours d'envoie\n Le code est envoyé au destinataire");
             }
         });
+    }
+
+    private void createDialog(String title, String text)
+    {
+        // Création d'un popup affichant un message
+        AlertDialog ad = new AlertDialog.Builder(this)
+                .setPositiveButton("Ok", null).setTitle(title).setMessage(text)
+                .create();
+        ad.show();
     }
 }
