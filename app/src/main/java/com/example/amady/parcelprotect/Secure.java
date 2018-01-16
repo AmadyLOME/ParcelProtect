@@ -26,10 +26,10 @@ public class Secure extends AppCompatActivity {
         ListView listeDestinataire = (ListView) findViewById(R.id.listedestinataire);
 
         //essaie remplissage listview
-        private String[] harnais = new String[]{
+        String[] harnais = new String[]{
                 "000001","000002","000003"
         };
-        private String[] destinataire = new String[]{
+        String[] destinataire = new String[]{
                 "000001","000002","000003"
         };
 
