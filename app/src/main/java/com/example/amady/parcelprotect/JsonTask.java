@@ -12,13 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-public class JsonTask extends AsyncTask<String, String, String> {
+public class JsonTask extends AsyncTask<String, String, JSONArray> {
 
     @Override
-    protected String doInBackground(String... params) {
+    protected JSONArray doInBackground(String... params) {
         HttpURLConnection connection = null;
         BufferedReader reader = null;
 
@@ -41,20 +40,7 @@ public class JsonTask extends AsyncTask<String, String, String> {
             JSONObject parentObj = new JSONObject(finalJson);
             JSONArray parrentArray = parentObj.getJSONArray("Harnais");
 
-
-            StringBuffer finalBufferData = new StringBuffer();
-            for (int i = 0; i < parrentArray.length(); i++ ) {
-                JSONObject Harnais = parrentArray.getJSONObject(i);
-
-                int HarnaisID = Harnais.getInt("idHarnais");
-                int HarnaisQrCode = Harnais.getInt("QRcode");
-                int HarnaisAdresseMac = Harnais.getInt("adresseMAC");
-                int HarnaisStatus = Harnais.getInt("status");
-
-                finalBufferData.append("id:" + HarnaisID + "\nQrcode:" + HarnaisQrCode + "\nMAC:" + HarnaisAdresseMac + "\nStatus:"+ HarnaisStatus + "\n\n");
-
-            }
-            return finalBufferData.toString();
+            return parrentArray;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         } finally {
@@ -73,8 +59,8 @@ public class JsonTask extends AsyncTask<String, String, String> {
     }
 
     @Override
-    protected void onPostExecute(String result) {
+    protected void onPostExecute(JSONArray result) {
         super.onPostExecute(result);
-        Log.d("postE:", result);
     }
 }
+
