@@ -1,7 +1,6 @@
 package com.example.amady.parcelprotect;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,7 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class JsonTask extends AsyncTask<String, String, JSONArray> {
+public class JsonTaskSelectAllClient extends AsyncTask<String, String, JSONArray> {
 
     @Override
     protected JSONArray doInBackground(String... params) {
@@ -38,7 +37,7 @@ public class JsonTask extends AsyncTask<String, String, JSONArray> {
             String finalJson = buffer.toString();
 
             JSONObject parentObj = new JSONObject(finalJson);
-            JSONArray parrentArray = parentObj.getJSONArray("Harnais");
+            JSONArray parrentArray = parentObj.getJSONArray("Client");
 
             return parrentArray;
         } catch (IOException | JSONException e) {
@@ -63,5 +62,3 @@ public class JsonTask extends AsyncTask<String, String, JSONArray> {
         super.onPostExecute(result);
     }
 }
-
-

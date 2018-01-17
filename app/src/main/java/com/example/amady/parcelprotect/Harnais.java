@@ -37,6 +37,6 @@ public class Harnais extends Object {
     }
 
     public String toString() {
-        return String.valueOf(HarnaisId);
+        return String.valueOf(HarnaisId) + " - " + String.valueOf(HarnaisAdresseMac);
     }
 }
