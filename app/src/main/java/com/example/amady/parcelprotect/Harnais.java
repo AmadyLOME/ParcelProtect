@@ -35,4 +35,8 @@ public class Harnais extends Object {
     public int getHarnaisStatus() {
         return HarnaisStatus;
     }
+
+    public String toString() {
+        return String.valueOf(HarnaisId);
+    }
 }
