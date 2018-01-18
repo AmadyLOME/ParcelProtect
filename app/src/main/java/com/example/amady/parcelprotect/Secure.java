@@ -6,17 +6,30 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
+import java.util.*;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.text.DateFormat;
 
 /**
  * Created by Amady on 06/10/2017.
@@ -24,15 +37,36 @@ import java.util.concurrent.ExecutionException;
 
 public class Secure extends AppCompatActivity {
 
-    // variable definissant les listview
-    private ListView listenvoyes;
-
     private JSONArray HarnaisTab;
     private JSONArray clientTab;
+    private JSONArray PointRelaisTab;
 
     // harnais user login url
     final String selectAllClient = "https://upmost-limps.000webhostapp.com/arona/selectAllClient.php";
     final String showHarnais = "https://upmost-limps.000webhostapp.com/arona/showHarnais.php";
+    final String selectAllPointRelais = "https://upmost-limps.000webhostapp.com/arona/selectAllPointRelais.php";
+
+    //Varibale à envoyer
+    public char idExpediteur;
+    public char idDestinataire;
+    public Boolean statutLivraison ;
+    // date envoie
+    public Date dateE = new Date();
+    DateFormat mediumDateFormatE = DateFormat.getDateTimeInstance(
+            DateFormat.MEDIUM,
+            DateFormat.MEDIUM);
+    public String dateEnvoie = String.valueOf(mediumDateFormatE.format(dateE));
+    // date reception
+    public Date dateR = new Date();
+    DateFormat mediumDateFormat = DateFormat.getDateTimeInstance(
+            DateFormat.MEDIUM,
+            DateFormat.MEDIUM);
+    public String dateReception = String.valueOf(mediumDateFormat.format(dateR));
+    //facturation
+    public Boolean statutFacturation;
+
+    public char idHarnais;
+    public char idRelais;
 
 
     @Override
@@ -42,36 +76,13 @@ public class Secure extends AppCompatActivity {
         setContentView(R.layout.secure);
 
         // ListView
-<<<<<<< HEAD
-        ListView listeHarnais = (ListView) findViewById(R.id.listeharnais);
-        ListView listeDestinataire = (ListView) findViewById(R.id.listedestinataire);
-
-        //essaie remplissage listview
-        String[] harnais = new String[]{
-                "000001","000002","000003"
-        };
-        String[] destinataire = new String[]{
-                "000001","000002","000003"
-        };
-=======
         ListView listeHarnais;
         ListView listeDestinataire;
->>>>>>> f9f0ad0b51e5d1d56be7b7d2407f9fa9a446526f
+        ListView listeRelais;
 
         // EditText
         EditText codeDesactivationAppWeb = (EditText) findViewById(R.id.codedesactwebapp);
-        final String codeDesactivationHarnais = String.valueOf(codeDesactivationAppWeb);
-        // Boutton de l'interface choix
-        Button btOk = (Button) findViewById(R.id.buttOk);
-        // démmarage de l'activité interface choix pour
-        btOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createDialog("Succès","Votre Colis est en cours d'envoie\n Le code est envoyé au destinataire");
-            }
-        });
         //----------------------------------Harnais---------------------------//
-
         try {
             HarnaisTab = new JsonTask().execute(showHarnais).get();
         } catch (InterruptedException | ExecutionException e1) {
@@ -106,8 +117,19 @@ public class Secure extends AppCompatActivity {
         listeHarnais.setAdapter(listDesHarnais);
         listeHarnais.setItemsCanFocus(true);
 
-        //----------------------------------client---------------------------//
+        listeHarnais.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                ListView lv = (ListView) arg0;
+                TextView tv = (TextView) lv.getChildAt(arg2);
+                String infoHarnaisSelected = tv.getText().toString();
+                idHarnais = infoHarnaisSelected.charAt(3);
+                Toast.makeText(Secure.this, "L'id du harnais selectionné est :"+ idHarnais, Toast.LENGTH_LONG).show();
+            } });
 
+
+        //----------------------------------client---------------------------//
         try {
             clientTab = new JsonTaskSelectAllClient().execute(selectAllClient).get();
         }
@@ -137,7 +159,7 @@ public class Secure extends AppCompatActivity {
         //essaie remplissage listview
         String[] id_selectAllClient = new String[clientlist.length];
         for (int i = 0; i < clientlist.length; i++) {
-            id_selectAllClient[i] = clientlist[i].toString();
+            id_selectAllClient[i] = "id:" + clientlist[i].getClientID() + " - " + clientlist[i].toString();
         }
 
         listeDestinataire = (ListView) findViewById(R.id.listedestinataire);
@@ -145,15 +167,122 @@ public class Secure extends AppCompatActivity {
         final ArrayAdapter<String> listDesClients = new ArrayAdapter<>(Secure.this, android.R.layout.simple_list_item_1, id_selectAllClient);
         listeDestinataire.setAdapter(listDesClients);
         listeDestinataire.setItemsCanFocus(true);
+
+        listeDestinataire.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                ListView liv = (ListView) arg0;
+                TextView tiv = (TextView) liv.getChildAt(arg2);
+                String destinataireSelectionné = tiv.getText().toString();
+                idDestinataire = destinataireSelectionné.charAt(3);
+                Toast.makeText(Secure.this, "L'id du Destinataire selectionné est :"+ idDestinataire, Toast.LENGTH_LONG).show();
+            } });
+        //----------------------------------Point Relais---------------------------//
+        try {
+            PointRelaisTab = new JsonTaskPointRelais().execute(selectAllPointRelais).get();
+        }
+        catch (InterruptedException | ExecutionException e1) {
+            e1.printStackTrace();
+        }
+        PointRelais PointRelaislist[] = new PointRelais[PointRelaisTab.length()];
+        for (int i = 0; i < PointRelaisTab.length(); i++) {
+            JSONObject PointRelais;
+
+            try {
+                PointRelais = PointRelaisTab.getJSONObject(i);
+                int PointRelaisID = PointRelais.getInt("idRelais");
+                String nomRelais = PointRelais.getString("NomRelais");
+                int AdresseID = PointRelais.getInt("Adresse_idAdresse");
+
+
+                PointRelaislist[i] = new PointRelais(PointRelaisID, nomRelais, AdresseID);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+           Log.d("TAG",PointRelaislist[0].PointRelaisID + " " + PointRelaislist[0].nomRelais);
+        }
+        //essaie remplissage listview
+        String[] id_selectedRelais = new String[PointRelaislist.length];
+        for (int i = 0; i < PointRelaislist.length; i++) {
+            id_selectedRelais[i] = PointRelaislist[i].toString();
+        }
+
+        listeRelais = (ListView) findViewById(R.id.listeRelais);
+
+        final ArrayAdapter<String> listDesRelais = new ArrayAdapter<>(Secure.this, android.R.layout.simple_list_item_1, id_selectedRelais);
+        listeRelais.setAdapter(listDesRelais);
+        listeRelais.setItemsCanFocus(true);
+
+        listeRelais.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                ListView liv1 = (ListView) arg0;
+                TextView tiv1 = (TextView) liv1.getChildAt(arg2);
+                String RelaisSelectionné = tiv1.getText().toString();
+                idRelais = RelaisSelectionné.charAt(3);
+                Toast.makeText(Secure.this, "L'id du Relais selectionné est :"+ idRelais, Toast.LENGTH_LONG).show();
+            } });
+        //----------------------------------Envoie de la commande---------------------------//
+
+        final String code = codeDesactivationAppWeb.getText().toString();
+        // Url du fichier insertenvoie.php
+        final String insertEnvoie = "https://upmost-limps.000webhostapp.com/arona/insertEnvoi.php";
+
+        //requestQueue
+        final RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        // Boutton d'envoie du colis
+        Button btOk = (Button) findViewById(R.id.buttOk);
+
+        btOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    //Insert dans php
+                    StringRequest request = new StringRequest(Request.Method.POST, insertEnvoie, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+                        @Override
+                        protected java.util.Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String> parameters = new HashMap<String, String>();
+
+                            parameters.put("Client_idExpediteur", String.valueOf(idExpediteur));
+                            parameters.put("Client_idDestinataire", String.valueOf(idDestinataire));
+                            parameters.put("statutLivraison", String.valueOf(statutLivraison));
+                            parameters.put("dateEnvoi", dateEnvoie);
+                            parameters.put("dateLivraison", dateReception);
+                            parameters.put("statutFacturation", String.valueOf(statutFacturation));
+                            parameters.put("codeOuverture", String.valueOf(code));
+                            parameters.put("Harnais_idHarnais", String.valueOf(idHarnais));
+                            parameters.put("Relais_idRelais", String.valueOf(idRelais));
+
+                            return parameters;
+                        }
+                    };
+                    requestQueue.add(request);
+                }
+        });
     }
 
     private void sendConfirmationEmail(String email, String codeDesactivationHarnais) {
         //setting content for email
+        // lien vers webapp
+        String link = null;
         String subject = "Confirmation Envoie N° + ";
         String message = "Bonjour,\n\nNous vous remercions pour cette commande d'envoie avec le harnais numéro:.\n" +
-                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant : http://upmost-limps.000webhostapp.com/php/validationEmail.php\n\n" +
-                "Votre code d'activation est le : "+ codeDesactivationHarnais +
-                "\n\nUne fois que votre compte est activé, vous pouvez vous connecter et gerer vos colis.\n\n" +
+                "Afin de compléter la procédure, veuillez cliquer sur le lien suivant" + link + "\n\n" +
+                "Votre code d'activation est le suivant : "+ codeDesactivationHarnais +
+                "\n\nMerci d'avoir choisi ParcelProtect, vous pouvez vous connecter et continuer à sécuriser vos colis.\n\n" +
                 "\nCordialement,\nL'équipe #TEAMHARNAIS";
 
         SendMail sm = new SendMail(this, email, subject, message);
