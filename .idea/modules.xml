@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\asow\AndroidStudioProjects\ParcelProtectClone\ParcelProtect.iml" filepath="C:\Users\asow\AndroidStudioProjects\ParcelProtectClone\ParcelProtect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ParcelProtect.iml" filepath="$PROJECT_DIR$/ParcelProtect.iml" />
+      <module fileurl="file://C:/Users/asow/AndroidStudioProjects/ParcelProtectClone/ParcelProtect.iml" filepath="C:/Users/asow/AndroidStudioProjects/ParcelProtectClone/ParcelProtect.iml" />
       <module fileurl="file://$PROJECT_DIR$/ParcelProtectClone.iml" filepath="$PROJECT_DIR$/ParcelProtectClone.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

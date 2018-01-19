@@ -70,7 +70,8 @@ public class Client extends Object {
         this.pseudoClient = pseudoClient;
     }
 
-    public String toString() {
+    public String toString() { return prenomClient + " " + nomClient;}
+    /*public String toString() {
         return nomClient + " " + prenomClient + " - " + telephoneClient;
-    }
+    }*/
 }

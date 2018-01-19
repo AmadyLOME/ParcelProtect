@@ -9,40 +9,37 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="15sp"
         android:background="#afafaf"
         android:text="Selection du harnais"
         />
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dip"
-        android:layout_marginTop="25dip"
-        android:layout_marginBottom="25dip"
-        android:layout_marginRight="25dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginBottom="20dip"
+        android:layout_marginRight="20dip"
         android:orientation="horizontal">
             <ListView
             android:id="@+id/listeharnais"
             android:layout_width="fill_parent"
             android:layout_height="50dp" />
     </RelativeLayout>
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="15sp"
         android:background="#afafaf"
         android:text="Selection du destinataire"
         />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dip"
-        android:layout_marginTop="25dip"
-        android:layout_marginBottom="25dip"
-        android:layout_marginRight="25dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginBottom="20dip"
+        android:layout_marginRight="20dip"
         android:orientation="horizontal">
             <ListView
             android:id="@+id/listedestinataire"
@@ -52,7 +49,27 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="15sp"
+        android:background="#afafaf"
+        android:text="Selection du Relais de Livraison"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginBottom="20dip"
+        android:layout_marginRight="20dip"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/listeRelais"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
         android:background="#afafaf"
         android:text="Code desactivation harnais pour APPWEB"
         />
@@ -78,11 +95,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#03ba31"
-        android:layout_marginLeft="25dip"
-        android:layout_marginTop="25dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginTop="15dip"
         android:layout_marginBottom="25dip"
-        android:layout_marginRight="25dip"
-        android:layout_weight="0.03"
+        android:layout_marginRight="15dip"
+        android:layout_weight="0.02"
         android:text="OK" />
 
 </LinearLayout>
