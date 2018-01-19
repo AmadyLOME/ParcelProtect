@@ -83,7 +83,8 @@ public class Login extends AppCompatActivity
                     //LoginCheckup
                     //checkLogin(userLogin, userPassword, loginURL, requestQueue);
                     //ClientEnConnexion clientInUse = new ClientEnConnexion(userLogin, getInfoClientInUse, requestQueueClientInUse);
-                    checkLogin("arona776@gmail.com", "bgarona", loginURL, requestQueue);
+                    //checkLogin("arona776@gmail.com", "bgarona", loginURL, requestQueue);
+                    checkLogin(userLogin, userPassword, loginURL, requestQueue);
                     ClientEnConnexion clientInUse = new ClientEnConnexion("arona776@gmail.com", getInfoClientInUse, requestQueueClientInUse);
                     clientInUse.setNomClient("SOW");
                     clientInUse.setClientID(7);
@@ -91,6 +92,7 @@ public class Login extends AppCompatActivity
                     Log.d("TEL", String.valueOf(clientInUse.getTelephone()));
                     Log.d("TAG", clientInUse.getPseudo());
                     Log.d("TAG", clientInUse.getPrenomClient());*/
+
                 }
                 else {
                     createDialog("Erreur", "L'email ou le mot de passe n'est pas valide!");
