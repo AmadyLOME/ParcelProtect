@@ -1,4 +1,20 @@
 package com.example.amady.parcelprotect;
+/**
+ * Created by asow on 18/01/2018.
+ */
+
+import android.os.AsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,9 +31,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.*;
+import java.util.jar.Attributes;
 
-public class JsonTask extends AsyncTask<String, String, JSONArray> {
+public class JsonTaskGetClientInfo extends AsyncTask<String, String, JSONArray> {
 
     @Override
     protected JSONArray doInBackground(String... params) {
@@ -26,7 +43,9 @@ public class JsonTask extends AsyncTask<String, String, JSONArray> {
 
         try {
             URL url = new URL(params[0]);
+
             connection = (HttpURLConnection) url.openConnection();
+            //(String)put(new Attributes.Name(email), value);
             connection.connect();
 
             StringBuffer buffer = new StringBuffer();
@@ -41,7 +60,7 @@ public class JsonTask extends AsyncTask<String, String, JSONArray> {
             String finalJson = buffer.toString();
 
             JSONObject parentObj = new JSONObject(finalJson);
-            JSONArray parrentArray = parentObj.getJSONArray("Harnais");
+            JSONArray parrentArray = parentObj.getJSONArray("Client");
 
             return parrentArray;
         } catch (IOException | JSONException e) {

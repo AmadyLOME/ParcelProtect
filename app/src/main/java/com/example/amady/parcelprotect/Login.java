@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -18,10 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.cast.framework.SessionManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -61,8 +56,13 @@ public class Login extends AppCompatActivity
         final RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
+        //requestQueueClientInUse
+        final RequestQueue requestQueueClientInUse;
+        requestQueueClientInUse = Volley.newRequestQueue(getApplicationContext());
+
         // Server user login url
         final String loginURL = "https://upmost-limps.000webhostapp.com/arona/loginFunction.php";
+        final String getInfoClientInUse = "https://upmost-limps.000webhostapp.com/arona/getClientInfos.php";
 
 
         // Définition du listener du bouton
@@ -82,7 +82,13 @@ public class Login extends AppCompatActivity
                     // On appelle la fonction doLogin qui va communiquer avec le PHP et vérifier les logs
                     //LoginCheckup
                     checkLogin(userLogin, userPassword, loginURL, requestQueue);
-                    //checkLogin("arona776@gmail.com", "bgarona", loginURL, requestQueue);
+                    ClientEnConnexion clientInUse = new ClientEnConnexion("arona776@gmail.com", getInfoClientInUse, requestQueueClientInUse);
+                    clientInUse.setNomClient("SOW");
+                    /*Log.d("TAG", clientInUse.nomClient);
+                    Log.d("TEL", String.valueOf(clientInUse.getTelephone()));
+                    Log.d("TAG", clientInUse.getPseudo());
+                    Log.d("TAG", clientInUse.getPrenomClient());
+                    checkLogin("arona776@gmail.com", "bgarona", loginURL, requestQueue);*/
                 }
                 else {
                     createDialog("Erreur", "L'email ou le mot de passe n'est pas valide!");
