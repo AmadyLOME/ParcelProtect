@@ -80,15 +80,13 @@ public class Secure extends AppCompatActivity {
         ListView listeDestinataire;
         ListView listeRelais;
 
-        // EditText
-        EditText codeDesactivationAppWeb = (EditText) findViewById(R.id.codedesactwebapp);
         //----------------------------------Harnais---------------------------//
         try {
             HarnaisTab = new JsonTask().execute(showHarnais).get();
         } catch (InterruptedException | ExecutionException e1) {
             e1.printStackTrace();
         }
-        Harnais harnaisList[] = new Harnais[HarnaisTab.length()];
+        final Harnais harnaisList[] = new Harnais[HarnaisTab.length()];
         for (int i = 0; i < HarnaisTab.length(); i++) {
             JSONObject Harnais;
 
@@ -225,8 +223,6 @@ public class Secure extends AppCompatActivity {
                 Toast.makeText(Secure.this, "L'id du Relais selectionné est :"+ idRelais, Toast.LENGTH_LONG).show();
             } });
         //----------------------------------Envoie de la commande---------------------------//
-
-        final String code = codeDesactivationAppWeb.getText().toString();
         // Url du fichier insertenvoie.php
         final String insertEnvoie = "https://upmost-limps.000webhostapp.com/arona/insertEnvoi.php";
 
@@ -236,14 +232,21 @@ public class Secure extends AppCompatActivity {
 
         // Boutton d'envoie du colis
         Button btOk = (Button) findViewById(R.id.buttOk);
+        // EditText
+        final EditText codeDesactivationAppWeb = (EditText) findViewById(R.id.codedesactwebapp);
 
         btOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    //Insert dans php
+                final String code;
+                code = codeDesactivationAppWeb.getText().toString();
+                //Insert dans php
                     StringRequest request = new StringRequest(Request.Method.POST, insertEnvoie, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            Log.d("TAG", response);
+                            Intent intent = new Intent(Secure.this, InterfaceChoix.class);
+                            startActivity(intent);
 
                         }
                     }, new Response.ErrorListener() {
@@ -256,20 +259,23 @@ public class Secure extends AppCompatActivity {
                         protected java.util.Map<String, String> getParams() throws AuthFailureError {
                             Map<String, String> parameters = new HashMap<String, String>();
 
-                            parameters.put("Client_idExpediteur", String.valueOf(idExpediteur));
+                            parameters.put("Client_idExpediteur", String.valueOf(2));
                             parameters.put("Client_idDestinataire", String.valueOf(idDestinataire));
-                            parameters.put("statutLivraison", String.valueOf(statutLivraison));
-                            parameters.put("dateEnvoi", dateEnvoie);
-                            parameters.put("dateLivraison", dateReception);
-                            parameters.put("statutFacturation", String.valueOf(statutFacturation));
                             parameters.put("codeOuverture", String.valueOf(code));
+                            parameters.put("statutLivraison", String.valueOf(statutLivraison));
                             parameters.put("Harnais_idHarnais", String.valueOf(idHarnais));
                             parameters.put("Relais_idRelais", String.valueOf(idRelais));
+                            //parameters.put("dateEnvoi", dateEnvoie);
+                            //parameters.put("dateLivraison", dateReception);
+                            //parameters.put("statutFacturation", String.valueOf(statutFacturation));
+                            Log.d("code", String.valueOf(code));
+                            Log.d("idDestinataire", String.valueOf(idDestinataire));
 
                             return parameters;
                         }
                     };
                     requestQueue.add(request);
+                    //sendConfirmationEmail("");
                 }
         });
     }
