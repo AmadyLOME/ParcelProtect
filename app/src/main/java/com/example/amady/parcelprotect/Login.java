@@ -81,8 +81,8 @@ public class Login extends AppCompatActivity
                     String password = PassEditText.getText().toString();
                     // On appelle la fonction doLogin qui va communiquer avec le PHP et vérifier les logs
                     //LoginCheckup
-                    //checkLogin(userLogin, userPassword, loginURL, requestQueue);
-                    checkLogin("amadylome93@live.fr", "Blaise59", loginURL, requestQueue);
+                    checkLogin(userLogin, userPassword, loginURL, requestQueue);
+                    //checkLogin("amadylome93@live.fr", "Blaise59", loginURL, requestQueue);
                 }
                 else {
                     createDialog("Erreur", "L'email ou le mot de passe n'est pas valide!");

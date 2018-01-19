@@ -76,10 +76,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dip"
-        android:layout_marginTop="25dip"
-        android:layout_marginBottom="25dip"
-        android:layout_marginRight="25dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginBottom="15dip"
+        android:layout_marginRight="20dip"
         android:orientation="horizontal">
         <EditText
             android:id="@+id/codedesactwebapp"
@@ -90,6 +90,7 @@
             android:inputType="number"
             android:fadingEdge="horizontal"/>
     </RelativeLayout>
+
     <Button
         android:id="@+id/buttOk"
         android:layout_width="match_parent"
