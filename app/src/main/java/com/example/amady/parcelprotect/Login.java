@@ -82,11 +82,11 @@ public class Login extends AppCompatActivity
                     // On appelle la fonction doLogin qui va communiquer avec le PHP et vérifier les logs
                     //LoginCheckup
                     //checkLogin(userLogin, userPassword, loginURL, requestQueue);
-                    //ClientEnConnexion clientInUse = new ClientEnConnexion(userLogin, getInfoClientInUse, requestQueueClientInUse);
+                    ClientEnConnexion clientInUse = new ClientEnConnexion(userLogin, getInfoClientInUse, requestQueueClientInUse);
                     //checkLogin("arona776@gmail.com", "bgarona", loginURL, requestQueue);
                     checkLogin(userLogin, userPassword, loginURL, requestQueue);
-                    ClientEnConnexion clientInUse = new ClientEnConnexion("arona776@gmail.com", getInfoClientInUse, requestQueueClientInUse);
-                    clientInUse.setNomClient("SOW");
+                   // ClientEnConnexion clientInUse = new ClientEnConnexion("arona776@gmail.com", getInfoClientInUse, requestQueueClientInUse);
+                    clientInUse.setNomClient("LOME");
                     clientInUse.setClientID(7);
                     /*Log.d("TAG", clientInUse.nomClient);
                     Log.d("TEL", String.valueOf(clientInUse.getTelephone()));
